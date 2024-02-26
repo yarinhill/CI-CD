@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    try {
+                        echo "Building Docker image..."
+                        def imageName = "dockerhub/jenkins-ssh-agent"
+                        def dockerfileDir = "jenkins/agents"  
+                        def dockerTag = "latest"
+                        def dockerImage = docker.build("${imageName}:${dockerTag}", "-f ${dockerfileDir}/Dockerfile ${dockerfileDir}")
+                        echo "Build completed successfully!"
+                    } catch (Exception e) {
+                        error "Failed to build Docker image: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        def imageName = "dockerhub/jenkins-ssh-agent"
+                        def dockerTag = "latest"
+                        docker.withRegistry('', 'dockerhub') {
+                            docker.image("${imageName}:${dockerTag}").push() 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
