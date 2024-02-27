@@ -8,7 +8,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ~/.aws/:/var/lib/jenkins/.aws
-    image: your_repo/jenkins
+    image: yarinhill/jenkins
     user: jenkins
     privileged: true
     restart: always
