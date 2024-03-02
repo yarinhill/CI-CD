@@ -13,7 +13,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.io.OutputStream
 
-
 plugins {
     id 'java'
 }
@@ -35,10 +34,6 @@ task startDockerComposeProd(type: Exec) {
         def MONGO_INITDB_ROOT_PASSWORD = project.hasProperty('MONGO_INITDB_ROOT_PASSWORD') ? project.property('MONGO_INITDB_ROOT_PASSWORD') : "defaultRootPassword"
         environment "MONGO_USER", MONGO_USER
         environment "MONGO_PASSWORD", MONGO_PASSWORD
-        println("MONGO_USER: ${MONGO_USER}")
-        println("MONGO_PASSWORD: ${MONGO_PASSWORD}")
-        println("MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}")
-        println("MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}")
 }
 
 task startDockerComposeDev(type: Exec) {
@@ -50,10 +45,6 @@ task startDockerComposeDev(type: Exec) {
         def MONGO_INITDB_ROOT_PASSWORD = project.hasProperty('MONGO_INITDB_ROOT_PASSWORD') ? project.property('MONGO_INITDB_ROOT_PASSWORD') : "defaultRootPassword"
         environment "MONGO_USER", MONGO_USER
         environment "MONGO_PASSWORD", MONGO_PASSWORD
-        println("MONGO_USER: ${MONGO_USER}")
-        println("MONGO_PASSWORD: ${MONGO_PASSWORD}")
-        println("MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}")
-        println("MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}")
 }
 
 task nodeChecker {
@@ -82,27 +73,16 @@ if (docker_swarm == true) {
         def MONGO_PASSWORD = project.hasProperty('MONGO_PASSWORD') ? project.property('MONGO_PASSWORD') : "defaultMongoPassword"
         def MONGO_INITDB_ROOT_USERNAME = project.hasProperty('MONGO_INITDB_ROOT_USERNAME') ? project.property('MONGO_INITDB_ROOT_USERNAME') : "defaultRootUser"
         def MONGO_INITDB_ROOT_PASSWORD = project.hasProperty('MONGO_INITDB_ROOT_PASSWORD') ? project.property('MONGO_INITDB_ROOT_PASSWORD') : "defaultRootPassword"
-        //environment "MONGO_INITDB_ROOT_USERNAME", MONGO_INITDB_ROOT_USERNAME
         environment "MONGO_USER", MONGO_USER
         environment "MONGO_PASSWORD", MONGO_PASSWORD
-        // Print the values for debugging
-        println("MONGO_USER: ${MONGO_USER}")
-        println("MONGO_PASSWORD: ${MONGO_PASSWORD}")
-        //environment "MONGO_INITDB_ROOT_PASSWORD", MONGO_INITDB_ROOT_PASSWORD
-        println("MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}")
-        println("MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}")
     }
 }
-
-
-
 
 def sendHttpRequest(String urlString, String payload, String successMessage) {
     HttpURLConnection connection = (HttpURLConnection) new URL(urlString).openConnection()
     connection.requestMethod = "POST"
     connection.doOutput = true
     connection.setRequestProperty("Content-Type", "application/json")
-
     try (OutputStream os = connection.outputStream) {
         byte[] input = payload.getBytes("utf-8")
         os.write(input, 0, input.length)
@@ -110,14 +90,10 @@ def sendHttpRequest(String urlString, String payload, String successMessage) {
 
     int responseCode = connection.responseCode
     println("HTTP Status Code: ${responseCode}")
-
-    // Check for successful response codes (200, 201, etc.)
     if (responseCode >= 200 && responseCode < 300) {
         println("✅ API POST Request is successful! - ${successMessage}")
     } else {
         println("❌ API POST Request failed with status code: ${responseCode}")
-
-        // Print additional details for 400 errors
         if (responseCode == 400) {
             println("Response Message: ${connection.responseMessage}")
             println("Response Content: ${connection.inputStream.text}")
@@ -131,8 +107,6 @@ task makeHttpGetRequest {
         def url = "http://${app_ip}/api/v1"
         println("${app_ip}")
         println("${url}")
-        //def APP_IP = project.findProperty('APP_IP')
-        // def serverIP = InetAddress.localHost.hostAddress
         def client = HttpClient.newHttpClient()
         def request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -157,8 +131,6 @@ task makeHttpGetRequest {
 
 task makeHttpSignUpRequest {
     doLast {
-        //def username = project.findProperty('USERNAME')
-        //def password = project.findProperty('PASSWORD')
         def username = System.getenv('USERNAME')
         def password = System.getenv('PASSWORD')
         def app_ip = System.getenv('APP_IP')
@@ -173,8 +145,7 @@ task makeHttpSignUpRequest {
 
 task makeHttpLoginRequest {
     doLast {
-        //def username = project.findProperty('USERNAME')
-        //def password = project.findProperty('PASSWORD')
+
         def username = System.getenv('USERNAME')
         def password = System.getenv('PASSWORD')
         def app_ip = System.getenv('APP_IP')
