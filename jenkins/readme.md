@@ -1,15 +1,8 @@
 # Jenkins Project
 
-### 1.
-run the jenkins-pre-install.sh script
-
-```
-./jenkins-pre-install.sh
-```
-
 ## Build Jenkins Docker Image && Container:
 
-### 2.
+### 1.
 Build the Docker Image && Container
 
 ```
