@@ -5,9 +5,6 @@ services:
     volumes:
       - ./jenkins_home:/var/lib/jenkins
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      - ~/.aws/:/var/lib/jenkins/.aws
     image: yarinhill/jenkins
     user: jenkins
     privileged: true
