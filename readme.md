@@ -1,4 +1,4 @@
-# Gradle Project
+# CI/CD Project using Jenkins & Gradle
 
 ### 1. 
 Create a dockerhub account with a token.
